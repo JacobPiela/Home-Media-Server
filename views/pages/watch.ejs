@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="utf-8">
+   <title>watch</title>
+   <style>
+       
+   </style>
+</head>
+   <body>
+       <div id="video"  controls poster="/">
+            <video id="vidPlayer" controls src="/video/<%= vid %>">
+                    Your browser does not support the video.
+            </video> 
+       </div>
+       <div id="info">
+            <img src="/poster/<%= vid %>" alt="movie poster" height="200" width="150">
+            <div id="description">
+                <%= description %>
+            </div> 
+       </div>
+       <div id="parts">
+            <ul>
+                    <% parts.forEach(function(part) { %>
+                        <li><%= part.name %></li>
+                    <% }); %>
+                </ul>
+        </div>
+        <script>
+            let vid = document.getElementById("vidPlayer");
+            let xmlhttp = new XMLHttpRequest();
+            let url = "/gettimestamp/<%= vid %>";
+            function gettime(){
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let timestamp = JSON.parse(this.responseText).timestamp;
+                    vid.currentTime = parseFloat(timestamp,10);
+                    settime();
+                }
+            };
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
+            }
+            
+            function settime(){ 
+                let vid = document.getElementById("vidPlayer");
+                let xmlhttp = new XMLHttpRequest();
+                let url = "/settimestamp/<%= vid %>?time=" + vid.currentTime;
+
+                xmlhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                    }
+                };
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
+        
+            }
+
+            vid.oncanplay = gettime();
+            vid.onseeked = settime();
+            setInterval(settime, 15000);
+        </script>
+  
+   </body>
+</html>

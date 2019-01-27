@@ -1,0 +1,75 @@
+body {
+     background:url(/login/loginIMG.jpg);
+     background-repeat:no-repeat;
+     background-position:center center;
+     background-attachment:fixed;
+     background-size:cover;
+
+}
+p.correct{
+     position: fixed;
+     top: 70%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+}
+input[type=text] {
+     width: 70%;
+     margin: 5px 0px 5px 0px;
+}
+input[type=password] {
+     width: 70%;
+     margin: 5px 0px 5px 0px;
+}
+
+input[type=button] {
+     background-color: #4056E6;
+     cursor: pointer;
+     margin: 10px 0px 10px 0px;
+     width: 99%
+}
+div.login {
+     position: fixed;
+     top: 40%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     color:#ffffff;
+     height: 150px;
+     padding: 20px;
+     text-align: center;
+     text-overflow: ellipsis;
+     background-color: rgba(50, 50, 50 ,0.4);
+     width: 400px;
+     border-radius: 25px;
+}
+div.img {
+     display: block;
+     height: 35px;
+     width: 100%;
+     margin: 0px 0px 10px 0px;
+     overflow: hidden;
+/*for logo or img styleing*/
+     list-style-type:none;
+     color: #ffffff;
+     text-align: center;
+     font-family: New Century Schoolbook,serif;
+     font-style: oblique;
+     font-size: 150%;
+     border-radius: 25px;
+/*end logo*/
+}
+@media (max-height: 450px){
+     div.img {
+     display: none;
+}
+     div.login {
+     height: 100px;
+}
+}
+@media (max-width: 300px){
+     div.login {
+     width: 100px;
+}
+     div.img {
+     display: none;
+}
+}

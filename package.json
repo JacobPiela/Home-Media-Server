@@ -1,0 +1,28 @@
+{
+  "name": "homeserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node dist/app.js",
+    "compile": "tsc -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jacob Piela",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^10.12.18",
+    "client-sessions": "^0.8.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "js-sha512": "^0.8.0",
+    "mongodb": "^3.1.12",
+    "sha512": "0.0.1",
+    "winston": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.1.19"
+  }
+}

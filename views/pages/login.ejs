@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/login/loginPage.css" />
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width" />
+        <title>Login</title>
+    </head>
+    <body>
+        <div class="login">
+            <div class="img">
+                Home Media server
+            </div>
+            <form action="/login" method="post" id="login">
+                user:
+                <input id="user" type="text" name="user"><br>
+                pass:
+                <input id="pass" type="password" name="pass"><br>
+                <input type="submit" value="login">
+                <button type="button" onclick="document.getElementById('login').style = 'display: none;';
+                document.getElementById('gestlogin').style = 'display: block;';">Gest Login</button>
+            </form>
+            <form action="/login" method="post" id="gestlogin" style = 'display: none;'>
+                ID:
+                <input id="ID" type="text" name="ID"><br>
+                <input type="submit" value="login">
+                <button type="button" onclick="document.getElementById('gestlogin').style = 'display: none;';
+                document.getElementById('login').style = 'display: block;';">Back</button>
+            </form>
+            
+        </div>
+        <br><p style="color: red" class="correct"><%= correct %></p>
+    </body>
+</html>

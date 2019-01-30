@@ -21,7 +21,7 @@ export class login {
     }
 
     public requireLogin = (req:any, res:any, next:any) => {
-        if(req.originalUrl.startsWith(appRoute + this.publicRoute) || req.originalUrl.startsWith("favicon.ico")){
+        if(req.originalUrl.startsWith(appRoute + this.publicRoute) || req.originalUrl.startsWith("/favicon.ico")){
             next();
         } else if(req.session.guest){
             this.checkGuest(req.session.guest,req.originalUrl).then(access => {

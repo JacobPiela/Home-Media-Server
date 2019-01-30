@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node dist/app.js",
+    "start": "node -r dotenv/config dist/app.js",
     "compile": "tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/node": "^10.12.18",
     "client-sessions": "^0.8.0",
+    "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "js-sha512": "^0.8.0",
@@ -23,6 +24,7 @@
     "winston": "^3.2.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^6.1.0",
     "@types/mongodb": "^3.1.19"
   }
 }

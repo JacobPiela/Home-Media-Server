@@ -15,7 +15,7 @@ class login {
     constructor() {
         this.publicRoute = "/login";
         this.requireLogin = (req, res, next) => {
-            if (req.originalUrl.startsWith(appRoute + this.publicRoute) || req.originalUrl.startsWith("favicon.ico")) {
+            if (req.originalUrl.startsWith(appRoute + this.publicRoute) || req.originalUrl.startsWith("/favicon.ico")) {
                 next();
             }
             else if (req.session.guest) {

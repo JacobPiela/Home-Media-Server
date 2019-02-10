@@ -19,16 +19,16 @@ function makeRandomChar(length:number):string {
 
 
 export let requireLogin = (req:any, res:any, next:any) => {
-    if(req.originalUrl.startsWith(appRoute + this.publicRoute) || req.originalUrl.startsWith("/favicon.ico")){
+    if(req.originalUrl.startsWith(appRoute + publicRoute) || req.originalUrl.startsWith("/favicon.ico")){
         next();
     } else if(req.session.guest){
-        this.checkGuest(req.session.guest,req.originalUrl).then(access => {
+        checkGuest(req.session.guest,req.originalUrl).then(access => {
             if(access){
                 next();
             }
         })
     } else if (req.session.user ){
-        this.checkUser(req.session.user,req.originalUrl).then(access => {
+        checkUser(req.session.user,req.originalUrl).then(access => {
             if(access){
                 next();
             }

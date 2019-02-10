@@ -30,7 +30,7 @@ app.use(sessions({//TODO check security
 app.use(login.requireLogin);
 
 routes.register( app );
-routes.register( api );
+api.register( app );
 
 
 database.connect().then(() =>

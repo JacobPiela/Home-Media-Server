@@ -1,11 +1,11 @@
 import * as express from "express";
+import dotenv = require("dotenv");
 import database = require("./database");
-import { login as loginManager } from "./login";
+import login = require("./login");
 
 
-const appRoot:string = "/home/jacob/projects/HomeServer/";
-const appRoute:string = "";
-let login:any = new loginManager();
+const appRoot:string = process.env.appRoot;
+const appRoute:string = process.env.appRoute;
 
 export const register = ( app: express.Application ) => {
     app.route(appRoute + '/login')
@@ -49,6 +49,7 @@ app.all(appRoute + '/logout', (req:any, res:any) => {
 
 app.use(appRoute + '/static',express.static('static'));
 app.use(appRoute + '/login',express.static('static/login'));
+
 app.all('/favicon.ico', (req:any, res:any) => res.sendFile(appRoot + 'static/images/favicon.ico'));
 
 app.all(appRoute + '/media',(req:any, res:any) => {
@@ -64,17 +65,6 @@ app.all(appRoute + '/media',(req:any, res:any) => {
     })
 });
 
-app.use(appRoute + '/meta',(req:any, res:any) => {
-    database.media.findOne({title: req.query.title.replace(/_/g," ")}).then( media => {
-        if(media != null){
-            res.send(media);
-        } else {
-            res.render("pages/404");
-        }
-    }).catch(err => {
-        console.log("database error");
-    })
-});
 
 
 app.use(appRoute + '/guest',(req:any, res:any) => {

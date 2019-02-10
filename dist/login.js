@@ -37,6 +37,7 @@ class login {
             }
         };
     }
+    //makes a random string of upper lower case letters and numbers
     makeRandomChar(length) {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         let out = "";

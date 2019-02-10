@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const database = require("./database");
 const login_1 = require("./login");
-const appRoot = "/home/jacob/projects/HomeServer/";
-const appRoute = "";
+const appRoot = process.env.appRoot;
+const appRoute = process.env.appRoute;
 let login = new login_1.login();
 exports.register = (app) => {
     app.route(appRoute + '/login')

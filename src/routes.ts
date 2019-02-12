@@ -53,9 +53,9 @@ app.use(appRoute + '/login',express.static('static/login'));
 app.all('/favicon.ico', (req:any, res:any) => res.sendFile(appRoot + 'static/images/favicon.ico'));
 
 app.all(appRoute + '/media',(req:any, res:any) => {
-    database.media.findOne({title: req.query.title.replace(/_/g," ")}).then( media => {
-        if(media != null && parseInt(req.query.part,10) < media.parts.length){
 
+    database.getMedia(req.query.title).then( media => {
+        if(media != null && parseInt(req.query.part,10) < media.parts.length){
             res.sendFile(media.dir + "/" + media.parts[parseInt(req.query.part,10)]);
         } else {
             res.render("pages/404");
@@ -68,13 +68,13 @@ app.all(appRoute + '/media',(req:any, res:any) => {
 
 
 app.use(appRoute + '/guest',(req:any, res:any) => {
-    database.guests.findOne({ID: req.session.guest}).then( guest => {
+    database.getGuest(req.session.guest).then( guest => {
         if(guest != null){
             res.render("pages/guest",{
                 media: guest.media
             });
         } else {
-            res.render("you are not a guest please login");
+            res.send("you are not a guest please login");
         }
     }).catch(err => {
         console.log("database error");

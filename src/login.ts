@@ -16,21 +16,37 @@ function makeRandomChar(length:number):string {
     return out;
 };
 
-
+const pageAccess = { 
+    guestPages: [
+        "/api",
+        "/guest",
+        "/logout"
+    ],
+    userPages: [
+        "/api",
+        "/",
+        "",
+        "/logout"
+    ]
+};
 
 export let requireLogin = (req:any, res:any, next:any) => {
     if(req.originalUrl.startsWith(appRoute + publicRoute) || req.originalUrl.startsWith("/favicon.ico")){
         next();
     } else if(req.session.guest){
-        checkGuest(req.session.guest,req.originalUrl).then(access => {
+        checkGuest(req.session.guest,req).then(access => {
             if(access){
                 next();
+            } else {
+                res.send("access denied");
             }
         })
     } else if (req.session.user ){
-        checkUser(req.session.user,req.originalUrl).then(access => {
+        checkUser(req.session.user,req).then(access => {
             if(access){
                 next();
+            } else {
+                res.send("access denied");
             }
         })
     } else {
@@ -42,8 +58,7 @@ export let requireLogin = (req:any, res:any, next:any) => {
 
 export async function loginUser(username:string,password:string):Promise<boolean> {
     let access:boolean = false;
-    await database.users.findOne({name: username}).then( user => {
-        console.log(user + " T");
+    await database.getUser(username).then( user => {
         if(user != null && sha512.sha512(password + user.salt) == user.hash){
             access = true;
         } else {
@@ -55,10 +70,20 @@ export async function loginUser(username:string,password:string):Promise<boolean
     return access;
 };
 
-export async function checkUser(username:string,page:string=null):Promise<boolean>{//TODO add privs
+export async function checkUser(username:string,req:any=null):Promise<boolean>{
     let access:boolean = false;
-    await database.users.findOne({name: 'username'}).then( user => {
-            access = true;
+    await database.getUser(username).then( user => {
+        if(user != null){
+            if(req === null){//if user logging in don't check page
+                access = true;
+            }else{
+                if(pageAccess.userPages.indexOf(req.path) != -1){//can the user access the page
+                    access = true;
+                } else if (false){//TODO admin
+                    
+                }
+            }
+        }
     }).catch(err => {
         console.log("user (" + username + ") tried to load a page but failed"); 
     })
@@ -66,13 +91,21 @@ export async function checkUser(username:string,page:string=null):Promise<boolea
 };
 
 
-export async function checkGuest(id:string,page:string=null):Promise<boolean> {//TODO add privs
+export async function checkGuest(id:string,req:any=null):Promise<boolean> {
     let access:boolean = false;
-    await database.guests.findOne({ID: id}).then( guest => {
+    await database.getGuest(id).then( guest => {
         if(guest != null){
-            access = true;
-        } else {
-            console.log("guest (" + id + ") tried to load a page but failed");  
+            if(guest.expire < Date.now()){
+                database.guests.deleteOne( {ID: id} );
+            } else {
+                if(req === null){//if guest logging in don't check page
+                    access = true;
+                }else if(pageAccess.guestPages.indexOf(req.path) != -1 || (req.path === "/media" && guest.media.indexOf(req.query.title) != -1)){//can the guest access the page
+                        access = true;
+                    } else {
+                    console.log("guest (" + id + ") tried to load a page but failed");  
+                }
+            }
         }
     }).catch(err => {
         console.log("database error"); 

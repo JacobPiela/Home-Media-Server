@@ -30,4 +30,37 @@ exports.connect = function () {
         return exports.db;
     });
 };
+exports.getGuest = function (id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let found = null;
+        yield exports.guests.findOne({ ID: id }).then(guest => {
+            found = guest;
+        }).catch(err => {
+            console.log(err);
+        });
+        return found;
+    });
+};
+exports.getUser = function (username) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let found = null;
+        yield exports.guests.findOne({ name: username }).then(user => {
+            found = user;
+        }).catch(err => {
+            console.log(err);
+        });
+        return found;
+    });
+};
+exports.getMedia = function (title) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let found = null;
+        yield exports.guests.findOne({ name: title }).then(media => {
+            found = media;
+        }).catch(err => {
+            console.log(err);
+        });
+        return found;
+    });
+};
 //# sourceMappingURL=database.js.map

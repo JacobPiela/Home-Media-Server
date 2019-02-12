@@ -22,21 +22,40 @@ function makeRandomChar(length) {
     return out;
 }
 ;
+const pageAccess = {
+    guestPages: [
+        "/api",
+        "/guest",
+        "/logout"
+    ],
+    userPages: [
+        "/api",
+        "/",
+        "",
+        "/logout"
+    ]
+};
 exports.requireLogin = (req, res, next) => {
     if (req.originalUrl.startsWith(appRoute + publicRoute) || req.originalUrl.startsWith("/favicon.ico")) {
         next();
     }
     else if (req.session.guest) {
-        checkGuest(req.session.guest, req.originalUrl).then(access => {
+        checkGuest(req.session.guest, req).then(access => {
             if (access) {
                 next();
+            }
+            else {
+                res.send("access denied");
             }
         });
     }
     else if (req.session.user) {
-        checkUser(req.session.user, req.originalUrl).then(access => {
+        checkUser(req.session.user, req).then(access => {
             if (access) {
                 next();
+            }
+            else {
+                res.send("access denied");
             }
         });
     }
@@ -47,8 +66,7 @@ exports.requireLogin = (req, res, next) => {
 function loginUser(username, password) {
     return __awaiter(this, void 0, void 0, function* () {
         let access = false;
-        yield database.users.findOne({ name: username }).then(user => {
-            console.log(user + " T");
+        yield database.getUser(username).then(user => {
             if (user != null && sha512.sha512(password + user.salt) == user.hash) {
                 access = true;
             }
@@ -63,11 +81,22 @@ function loginUser(username, password) {
 }
 exports.loginUser = loginUser;
 ;
-function checkUser(username, page = null) {
+function checkUser(username, req = null) {
     return __awaiter(this, void 0, void 0, function* () {
         let access = false;
-        yield database.users.findOne({ name: 'username' }).then(user => {
-            access = true;
+        yield database.getUser(username).then(user => {
+            if (user != null) {
+                if (req === null) { //if user logging in don't check page
+                    access = true;
+                }
+                else {
+                    if (pageAccess.userPages.indexOf(req.path) != -1) { //can the user access the page
+                        access = true;
+                    }
+                    else if (false) { //TODO admin
+                    }
+                }
+            }
         }).catch(err => {
             console.log("user (" + username + ") tried to load a page but failed");
         });
@@ -76,15 +105,25 @@ function checkUser(username, page = null) {
 }
 exports.checkUser = checkUser;
 ;
-function checkGuest(id, page = null) {
+function checkGuest(id, req = null) {
     return __awaiter(this, void 0, void 0, function* () {
         let access = false;
-        yield database.guests.findOne({ ID: id }).then(guest => {
+        yield database.getGuest(id).then(guest => {
             if (guest != null) {
-                access = true;
-            }
-            else {
-                console.log("guest (" + id + ") tried to load a page but failed");
+                if (guest.expire < Date.now()) {
+                    database.guests.deleteOne({ ID: id });
+                }
+                else {
+                    if (req === null) { //if guest logging in don't check page
+                        access = true;
+                    }
+                    else if (pageAccess.guestPages.indexOf(req.path) != -1 || (req.path === "/media" && guest.media.indexOf(req.query.title) != -1)) { //can the guest access the page
+                        access = true;
+                    }
+                    else {
+                        console.log("guest (" + id + ") tried to load a page but failed");
+                    }
+                }
             }
         }).catch(err => {
             console.log("database error");

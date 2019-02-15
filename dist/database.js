@@ -1,4 +1,21 @@
 "use strict";
+/*
+|---------------------------------------------------------------------------------------------|
+|                                HMS database layout                                          |
+|---------------------------------------------------------------------------------------------|
+|users                     |guests                           |media                           |
+|---------------------------------------------------------------------------------------------|
+|name                      |ID                               |title                           |
+|hash                      |media[title]                     |type                            |
+|salt                      |watchTimes{}                     |genres[]                        |
+|blackList[title]          |                                 |parts[fileName]                 |
+|maxRating                 |                                 |rating                          |
+|privs[]                   |                                 |poster:fileName                 |
+|mylist[]                  |                                 |dir                             |
+|watchTimes{}              |                                 |description                     |
+|recentlyWatched[]         |                                 |                                |
+|---------------------------------------------------------------------------------------------|
+*/
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -44,7 +61,7 @@ exports.getGuest = function (id) {
 exports.getUser = function (username) {
     return __awaiter(this, void 0, void 0, function* () {
         let found = null;
-        yield exports.guests.findOne({ name: username }).then(user => {
+        yield exports.users.findOne({ name: username }).then(user => {
             found = user;
         }).catch(err => {
             console.log(err);
@@ -55,7 +72,7 @@ exports.getUser = function (username) {
 exports.getMedia = function (title) {
     return __awaiter(this, void 0, void 0, function* () {
         let found = null;
-        yield exports.guests.findOne({ name: title }).then(media => {
+        yield exports.media.findOne({ title: title }).then(media => {
             found = media;
         }).catch(err => {
             console.log(err);

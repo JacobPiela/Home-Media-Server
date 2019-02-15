@@ -6,7 +6,7 @@
 |---------------------------------------------------------------------------------------------|
 |name                      |ID                               |title                           |
 |hash                      |media[title]                     |type                            |
-|salt                      |                                 |genres[]                        |
+|salt                      |watchTimes{}                     |genres[]                        |
 |blackList[title]          |                                 |parts[fileName]                 |
 |maxRating                 |                                 |rating                          |
 |privs[]                   |                                 |poster:fileName                 |
@@ -50,7 +50,7 @@ export let getGuest = async function(id):Promise<any> { //gets a guest by it's I
 
 export let getUser = async function(username):Promise<any> { //gets a user by it's username
     let found = null;
-    await guests.findOne({name: username}).then( user => {
+    await users.findOne({name: username}).then( user => {
         found = user;
         }).catch(err => {
             console.log(err); 
@@ -60,7 +60,7 @@ export let getUser = async function(username):Promise<any> { //gets a user by it
 
 export let getMedia = async function(title):Promise<any> { //gets a media by it's title
     let found = null;
-    await guests.findOne({name: title}).then( media => {
+    await media.findOne({title: title}).then( media => {
         found = media;
         }).catch(err => {
             console.log(err); 

@@ -20,13 +20,19 @@ const pageAccess = {
     guestPages: [
         "/api",
         "/guest",
-        "/logout"
+        "/logout",
+        "/watch",
+        "/media",
+        "/poster"
     ],
     userPages: [
         "/api",
         "/",
         "",
-        "/logout"
+        "/logout",
+        "/watch",
+        "/media",
+        "/poster"
     ]
 };
 
@@ -77,7 +83,7 @@ export async function checkUser(username:string,req:any=null):Promise<boolean>{
             if(req === null){//if user logging in don't check page
                 access = true;
             }else{
-                if(pageAccess.userPages.indexOf(req.path) != -1){//can the user access the page
+                if(req.path.startsWith("/static") || pageAccess.userPages.indexOf(req.path) != -1){//can the user access the page
                     access = true;
                 } else if (false){//TODO admin
                     

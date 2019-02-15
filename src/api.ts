@@ -33,6 +33,7 @@ export const register = ( app: express.Application ) => {//TODO api
             let sendmeta = (req:any, res:any) => {
                 database.getMedia(req.query.title).then( media => {
                     if(media != null){
+                        media.dir=undefined;
                         res.send(makeRes(false,media));
                     } else {
                         res.send(makeRes(true));
@@ -63,7 +64,7 @@ export const register = ( app: express.Application ) => {//TODO api
             if(req.session.user){
                 database.getUser(req.session.user).then( user => {
                     if(user != null){
-                            res.send(makeRes(false,user.watchTimes[req.query.title][parseInt(req.query.part,10)]));
+                            res.send(makeRes(false,user.watchTimes[decodeURI(req.query.title)][parseInt(req.query.part,10)]));
                     } else {
                         res.send(makeRes(true));
                     }
@@ -142,6 +143,20 @@ export const register = ( app: express.Application ) => {//TODO api
                 database.getUser(req.session.user).then( user => {
                     if(user != null){
                             res.send(makeRes(false,"OK"));
+                    } else {
+                        res.send(makeRes(true));
+                    }
+                }).catch(err => {
+                    console.log("database error");
+                })
+            } else {
+                res.send(makeRes(true));
+            }
+        } else if(req.body.update === "setTimeStamp"){
+            if(req.session.user){
+                database.users.updateOne({name:req.session.user}, {$set: JSON.parse("{\"watchTimes." + req.body.title + "." + req.body.part + "\":" + req.body.time + "}")}).then( ok => {
+                    if(ok != null){
+                        res.send(makeRes(false,"OK"));
                     } else {
                         res.send(makeRes(true));
                     }

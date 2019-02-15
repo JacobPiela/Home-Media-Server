@@ -1,0 +1,68 @@
+html{
+    margin:0;
+    height:100%;
+}
+body{
+    margin:0;
+    height:100%;
+}
+#media{
+    width:100%;
+    height:70%;
+    text-align: center;
+    background-color: black;
+}
+#videoPlayer{
+    text-align: center;
+    width:100%;
+    height:100%;
+}
+#videoPlayer-video{
+    text-align: center;
+    width:100%;
+    height:100%;
+}
+#poster{
+    float:left;
+    margin: 20px;
+}
+
+#title{
+    display: inline;
+    
+}
+#description{
+    display: inline;
+}
+#info{
+    padding: 30px;
+    min-height: 225px;
+}
+#parts{
+    margin: auto;
+}
+#parts-list{
+    overflow-y: scroll;
+    font-weight: bold;
+    font-size:120%;
+    list-style-type:none;
+    margin: auto;
+    width:50%;
+    height:500px;
+}
+#parts-list-part{
+    margin: auto;
+    padding: 20px;
+    text-decoration: none;
+    width:100%;
+}
+#parts-list-part-name{
+    position: relative;
+    left:30px;
+}
+#rating{
+    background-color: black;
+    color:white;
+}
+
+

@@ -59,6 +59,18 @@ exports.register = (app) => {
             console.log("database error");
         });
     });
+    app.all(appRoute + '/poster', (req, res) => {
+        database.getMedia(req.query.title).then(media => {
+            if (media != null) {
+                res.sendFile(media.dir + "/" + media.poster);
+            }
+            else {
+                res.render("pages/404");
+            }
+        }).catch(err => {
+            console.log("database error");
+        });
+    });
     app.use(appRoute + '/guest', (req, res) => {
         database.getGuest(req.session.guest).then(guest => {
             if (guest != null) {
@@ -72,6 +84,29 @@ exports.register = (app) => {
         }).catch(err => {
             console.log("database error");
         });
+    });
+    app.get(appRoute + '/watch', (req, res) => {
+        if (req.session.user) {
+            database.getUser(req.session.user).then(user => {
+                if (user.style) {
+                    res.render("pages/watch", {
+                        style: user.style
+                    });
+                }
+                else {
+                    res.render("pages/watch", {
+                        style: "light"
+                    });
+                }
+            }).catch(err => {
+                console.log("database error");
+            });
+        }
+        else {
+            res.render("pages/watch", {
+                style: "light"
+            });
+        }
     });
     app.get(appRoute + '/', (req, res) => res.send('Hello World!'));
 };

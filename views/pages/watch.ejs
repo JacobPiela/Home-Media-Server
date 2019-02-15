@@ -2,32 +2,46 @@
 <html lang="en">
 <head>
    <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width" />
    <title>watch</title>
-   <style>
-       
-   </style>
+   <link rel="stylesheet" type="text/css" href="/static/watch/watch.css">
+   <link rel="stylesheet" type="text/css" href="/static/watch/<%= style %>.css">
+   <script src='/static/watch/watch.js'></script>
 </head>
    <body>
-       <div id="video"  controls poster="/">
-            <video id="vidPlayer" controls src="/video/<%= vid %>">
-                    Your browser does not support the video.
-            </video> 
-       </div>
-       <div id="info">
-            <img src="/poster/<%= vid %>" alt="movie poster" height="200" width="150">
-            <div id="description">
-                <%= description %>
-            </div> 
-       </div>
-       <div id="parts">
-            <ul>
-                    <% parts.forEach(function(part) { %>
-                        <li><%= part.name %></li>
-                    <% }); %>
-                </ul>
+       <div id="media">
+           <div id="videoPlayer">
+                <video id="videoPlayer-video" controls>
+                    <b style="text-align: center;">
+                        Your browser does not support the video.
+                    </b>
+                </video> 
+            </div>
+            <div id="audioPlayer" style="display:none">
+                <audio controls>
+                    <source id="audioPlayer-audio" type="audio/mp3">
+                    <b style="text-align: center;">
+                        Your browser does not support the audio element.
+                    </b>
+                </audio> 
+            </div>
+            <div id="PDFViewer" style="display:none">
+                    <embed src="" alt="Your browser does not support PDFs" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">
+            </div>
         </div>
-        <script>
-        </script>
-  
+        <div id="info">
+            <div id="poster">
+                <img id="poster-img" src="" alt="Movie poster" height="200" width="150">
+            </div>
+            <div id="title"></div>
+            <div id="description">
+                
+            </div> 
+        </div>
+       <div id="parts">
+            <ul id="parts-list">
+                
+            </ul>
+        </div> 
    </body>
 </html>

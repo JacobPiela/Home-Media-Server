@@ -29,7 +29,11 @@ const pageAccess = {
         "/logout",
         "/watch",
         "/media",
-        "/poster"
+        "/poster",
+        "/static/watch/watch.js",
+        "/static/watch/watch.css",
+        "/static/watch/light.css",
+        "/static/watch/dark.css"
     ],
     userPages: [
         "/api",

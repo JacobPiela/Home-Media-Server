@@ -1,36 +1,3 @@
-/*let vid = document.getElementById("vidPlayer");
-let xmlhttp = new XMLHttpRequest();
-let url = "/gettimestamp/<%= vid %>";
-function gettime(){
-xmlhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        let timestamp = JSON.parse(this.responseText).timestamp;
-        vid.currentTime = parseFloat(timestamp,10);
-        settime();
-    }
-};
-xmlhttp.open("GET", url, true);
-xmlhttp.send();
-}
-
-function settime(){ 
-    let vid = document.getElementById("vidPlayer");
-    let xmlhttp = new XMLHttpRequest();
-    let url = "/settimestamp/<%= vid %>?time=" + vid.currentTime;
-
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-        }
-    };
-    xmlhttp.open("GET", url, true);
-    xmlhttp.send();
-
-}
-
-vid.oncanplay = gettime();
-vid.onseeked = settime();
-setInterval(settime, 15000);*/
-
 function getAPI(getString ,callback){ 
     let xmlhttp = new XMLHttpRequest();
     let url = "/api?" + getString;
@@ -56,8 +23,6 @@ function postAPI(getString ,callback){
     xmlhttp.send(getString);
 }
 
-//decodeURI(str)
-
 
 var getprams = {};
 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -72,6 +37,17 @@ getAPI("get=mediaMeta&title=" + getprams["title"],function(get){
         document.getElementById("videoPlayer").style = "display:none;";
         document.getElementById("PDFViewer").style = "display:none;";
         document.getElementById("audioPlayer-audio").src = "/media?title=" + get.res.title + "&part=" + ((getprams["part"] != undefined) ? getprams["part"] : "0");
+        document.getElementById("audioPlayer-audio").oncanplay = getAPI("get=getTimeStamp&title=" + get.res.title + "&part=" + ((getprams["part"] != undefined) ? getprams["part"] : "0"),function(getTime){
+            document.getElementById("audioPlayer-audio").currentTime = parseFloat(getTime.res,10);
+        });
+        document.getElementById("audioPlayer-audio").onended = function(){
+            window.location = "/watch?title=" + getprams["title"] + "&part=" +  (parseInt((getprams["part"] != undefined) ? getprams["part"] : "0",10) + 1);
+        }
+        setInterval(function(){
+            postAPI("update=setTimeStamp&title=" + getprams["title"] + "&part=" + ((getprams["part"] != undefined) ? getprams["part"] : "0") + "&time=" + document.getElementById("audioPlayer-audio").currentTime,function(ok){
+                console.log(ok);
+            });
+        }, 15000);
     } else if(get.res.type == "PDF"){
         document.getElementById("audioPlayer").style = "display:none;";
         document.getElementById("videoPlayer").style = "display:none;";
@@ -97,9 +73,8 @@ getAPI("get=mediaMeta&title=" + getprams["title"],function(get){
     if(get.res.parts.length > 1){
         let partsList = "";
         for(let part=0; part<get.res.parts.length; part++){
-            partsList += "<li id='parts-list-part' onclick='window.location =\"/watch?title=" + get.res.title + "&part=" + part + "\"'><span id='parts-list-part-id'>" + part + "</span><span id='parts-list-part-name'>" + get.res.parts[part].replace(/\.[^/.]+$/, "") + "</span></li>";
+            partsList += "<li id='parts-list-part' onclick='window.location =\"/watch?title=" + get.res.title + "&part=" + part + "\"'><span id='parts-list-part-id'>" + (part + 1)  + "</span><span id='parts-list-part-name'>" + get.res.parts[part].replace(/\.[^/.]+$/, "") + "</span></li>";
         }
         document.getElementById("parts-list").innerHTML = partsList;
     }
-    
 });

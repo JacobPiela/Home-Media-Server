@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width" />
+    <head>
+
+    </head>
+    <body>
+            <div style="padding:10px">
+                <a style="text-decoration: none; position: relative; float: right; right:100px;" href="/logout">Logout</a>
+                <span style="font-family:'Impact'; font-weight: bold; font-size: 130%; color:blue; position: relative; float: left; left:50px;">
+                    Home Media Server
+                </span>
+            </div>
+            <br/>
+            <% mList.forEach(function(mItem){ %>
+                <img style="float: left; padding: 5px; width:150px; height:200px;"
+                    src='/poster?title=<%= mItem.title %>'
+                    onclick='window.location ="/watch?title= <%= mItem.title %>" '>
+                </img>
+                <% }) %>
+
+    </body>
+</html>

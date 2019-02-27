@@ -108,6 +108,27 @@ exports.register = (app) => {
             });
         }
     });
-    app.get(appRoute + '/', (req, res) => res.send('Hello World!'));
+    app.get(appRoute + '/', (req, res) => {
+        try { //TODO
+            database.media.find({}).toArray(function (err, mList) {
+                if (err)
+                    throw err;
+                res.render("pages/home", { mList: mList });
+                //let html = "<body><div style=\" after {\
+                //    content: \"\";\
+                //    clear: both;\
+                //    display: table;\
+                //  } \">";
+                //for(let i=0; i<mList.length; i++){
+                //    html += "<img style=\"float: left; padding: 5px; width:150px; height:200px; \" src='/poster?title=" + mList[i].title + "' onclick='window.location =\"/watch?title=" + mList[i].title + "\"'><span>" + "<span/></img>";
+                //}
+                //html += "</div></body>";
+                //res.send(html);
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    });
 };
 //# sourceMappingURL=routes.js.map
